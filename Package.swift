@@ -2,6 +2,19 @@
 
 import PackageDescription
 
+// Approachable Concurrency settings for Swift 6.2
+let approachableConcurrencySettings: [SwiftSetting] = [
+    .enableUpcomingFeature("DisableOutwardActorInference"),
+    .enableUpcomingFeature("GlobalActorIsolatedTypesUsability"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    .enableUpcomingFeature("InferSendableFromCaptures"),
+    // .enableUpcomingFeature("NonisolatedNonsendingByDefault")
+]
+
+let defaultMainActorIsolationSettings = approachableConcurrencySettings + [
+    .unsafeFlags(["-Xfrontend", "-default-isolation", "-Xfrontend", "MainActor"])
+]
+
 let package = Package(
     name: "swift-windowsfoundation",
     products: [
@@ -18,7 +31,8 @@ let package = Package(
             name: "WindowsFoundation",
             dependencies: [
                 .product(name: "CWinRT", package: "swift-cwinrt"),
-            ]
+            ],
+            swiftSettings: defaultMainActorIsolationSettings
         ),
     ]
 )
